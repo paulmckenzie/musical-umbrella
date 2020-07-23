@@ -2,10 +2,13 @@ package cart
 
 import cart.Cart.calculateTotal
 
-case class Cart(totalPrice: BigDecimal = BigDecimal(0.0)) {
+case class Cart(items: List[Item] = Nil) {
+
   def addItems(items: Item*): Cart = addItems(items.toList)
 
-  def addItems(items: List[Item]): Cart = Cart(calculateTotal(items))
+  def addItems(items: List[Item]): Cart = Cart(items)
+
+  val totalPrice: BigDecimal = calculateTotal(items)
 }
 
 object Cart {
