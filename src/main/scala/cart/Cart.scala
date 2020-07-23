@@ -12,11 +12,7 @@ case class Cart(items: List[Item] = Nil) {
 }
 
 object Cart {
-  private def calculateTotal(items: List[Item]) = {
-    items.foldLeft(BigDecimal(0.0)) {
-      (acc, item) => acc + item.price
-    }
-  }
+  private def calculateTotal(items: List[Item]) = items.foldLeft(BigDecimal(0.0))((acc, item) => acc + item.price)
 }
 
 sealed trait Item {
