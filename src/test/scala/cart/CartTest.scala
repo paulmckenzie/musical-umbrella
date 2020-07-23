@@ -15,5 +15,12 @@ class CartTest extends AnyFreeSpec {
     "newly created has zero total" in {
       assert(0.0 === Cart().totalPrice)
     }
+
+    "Oranges" - {
+      "one orange" in {
+        val newCart = Cart().addItems(Orange)
+        assert(0.25 === newCart.totalPrice)
+      }
+    }
   }
 }
