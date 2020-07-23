@@ -2,6 +2,7 @@ package cart
 
 import cart.Cart.calculateTotal
 
+
 case class Cart(items: List[Item] = Nil) {
 
   def addItems(items: Item*): Cart = addItems(items.toList)
@@ -12,17 +13,26 @@ case class Cart(items: List[Item] = Nil) {
 }
 
 object Cart {
-  private def calculateTotal(items: List[Item]) = items.foldLeft(BigDecimal(0.0))((acc, item) => acc + item.price)
+  private def calculateTotal(items: List[Item]) = {
+    val value: Map[Item, List[Item]] = items.groupBy(identity)
+    value.foldLeft(BigDecimal(0.0)) {
+      (acc, op) =>
+        val (item, items) = op
+        acc + item.pricingFunction(items.size)
+    }
+  }
 }
 
 sealed trait Item {
-  val price: BigDecimal
+  type PricingFunction = Int => BigDecimal
+  val pricingFunction: PricingFunction
+
 }
 
 case object Orange extends Item {
-  override val price: BigDecimal = 0.25
+  override val pricingFunction: PricingFunction = count => count * 0.25
 }
 
 case object Apple extends Item {
-  override val price: BigDecimal = 0.60
+  override val pricingFunction: PricingFunction = count => ((count/2) + (count % 2)) * 0.6
 }

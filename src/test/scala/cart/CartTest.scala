@@ -38,12 +38,22 @@ class CartTest extends AnyFreeSpec {
         val newCart = Cart().addItems(Apple)
         assert(0.60 === newCart.totalPrice)
       }
+
+      "two apples, BOGOF" in {
+        val newCart = Cart().addItems(Apple, Apple)
+        assert(0.60 === newCart.totalPrice)
+      }
+
+      "three apples, BOGOF" in {
+        val newCart = Cart().addItems(Apple, Apple, Apple)
+        assert(1.20 === newCart.totalPrice)
+      }
     }
 
     "Mixed shopping" - {
       "Apple, Apple, Orange, Apple" in {
         val newCart = Cart().addItems(Apple, Apple, Orange, Apple)
-        assert(2.05 === newCart.totalPrice)
+        assert(1.45 === newCart.totalPrice)
       }
     }
   }
