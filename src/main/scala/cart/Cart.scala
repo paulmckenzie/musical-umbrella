@@ -14,13 +14,16 @@ case class Cart(items: List[Item] = Nil) {
 object Cart {
   private def calculateTotal(items: List[Item]) =
     items.groupBy(identity).view
-      .mapValues (_.size)
+      .mapValues(_.size)
       .map { case (item: Item, count: Int) => item.pricingFunction(count) }
       .sum
 }
 
 sealed trait Item {
   type PricingFunction = Int => BigDecimal
+
+  def buyOneGetOneFree(price: BigDecimal)(count: Int): BigDecimal = ((count / 2) + (count % 2)) * price
+
   val pricingFunction: PricingFunction
 
 }
@@ -30,5 +33,5 @@ case object Orange extends Item {
 }
 
 case object Apple extends Item {
-  override val pricingFunction: PricingFunction = count => ((count / 2) + (count % 2)) * 0.6
+  override val pricingFunction: PricingFunction = buyOneGetOneFree(0.6)
 }
